@@ -1,25 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
+import { Outlet, Link } from 'react-router-dom';
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+
+
+import {AuthContextProvider} from './Contexts'
+
 import './App.css';
+
+const queryClient = new QueryClient()
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <AuthContextProvider>
+        <div className="root">
+          <div>
+            <header>
+              <div><Link to='/auth/login/'>Login</Link></div>
+              <div><Link to="/auth/register/">Register</Link></div>
+              <div><Link to="/private/">Private</Link></div>
+            </header>
+          </div>
+          <Outlet />
+        </div>
+      </AuthContextProvider>
+    </QueryClientProvider>
   );
 }
 
