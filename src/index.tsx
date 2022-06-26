@@ -12,8 +12,9 @@ import {Homepage, Login, Register, AdminPanel} from './views'
 
 if (process.env.NODE_ENV === 'development') {
   inspect({
-    iframe: false
-  })
+    iframe: () => document.querySelector('iframe[data-xstate]') as HTMLIFrameElement,
+    url: 'https://stately.ai/viz?inspect'
+  });
 }
 
 const root = ReactDOM.createRoot(

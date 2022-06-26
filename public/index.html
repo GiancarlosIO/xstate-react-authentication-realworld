@@ -25,10 +25,19 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
+    <style>
+      .xstate-iframe-inspect {
+        position: absolute;
+        bottom: 0px;
+        width: 100vw;
+        height: 500px;
+      }
+    </style>
   </head>
-  <body>
+  <body style="min-height: 100vh; position: relative;">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <iframe data-xstate class="xstate-iframe-inspect"></iframe>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
