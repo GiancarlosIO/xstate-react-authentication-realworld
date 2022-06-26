@@ -6,6 +6,10 @@ export type TUser = {
   username: string;
 } | undefined;
 
+export type TContext = {
+  user: TUser
+} | undefined
+
 export type TAuthenticationMachineEvent = | {
   type: 'REPORT_IS_LOGGED_IN',
   user: TUser
@@ -23,19 +27,20 @@ export type TAuthenticationMachineStates = {
   context: undefined
 } | {
   value: 'loggedIn'
-  context: TUser
+  context: TContext
 } | {
   value: "loggedOut",
   context: undefined
 }
 
-export const authenticationMachine = createMachine<TUser, TAuthenticationMachineEvent, TAuthenticationMachineStates>({
+export const authenticationMachine = createMachine<TContext, TAuthenticationMachineEvent, TAuthenticationMachineStates>({
   schema: {
     services: {} as {
       checkIfLoggedIn: {
         data: { user: TUser }
       }
-    }
+    },
+    context: {} as TContext
   },
   id: 'authentication',
   initial: 'checkingIfLoggedIn',
@@ -63,7 +68,8 @@ export const authenticationMachine = createMachine<TUser, TAuthenticationMachine
       }
     },
     loggedOut: {
-      entry: ['navigateToHomepage', 'clearUserDetailsFromContext'],
+      // entry: ['onLoggedOut', 'clearUserDetailsFromContext'],
+      entry: [ 'clearUserDetailsFromContext'],
       on: {
         LOG_IN: {
           target: 'loggedIn',
@@ -78,7 +84,7 @@ export const authenticationMachine = createMachine<TUser, TAuthenticationMachine
         return {}
       }
       return {
-        ...event.user
+        user: event.user
       }
     }),
     clearUserDetailsFromContext: assign((context, event) => {

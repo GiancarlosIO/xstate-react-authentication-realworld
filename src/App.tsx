@@ -1,6 +1,6 @@
-import { Outlet, Link } from 'react-router-dom';
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
-
+import { Outlet } from 'react-router-dom';
+import { QueryClient, QueryClientProvider  } from 'react-query'
+import { ChakraProvider } from '@chakra-ui/react'
 
 import {AuthContextProvider} from './Contexts'
 
@@ -10,20 +10,15 @@ const queryClient = new QueryClient()
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthContextProvider>
-        <div className="root">
-          <div>
-            <header>
-              <div><Link to='/auth/login/'>Login</Link></div>
-              <div><Link to="/auth/register/">Register</Link></div>
-              <div><Link to="/private/">Private</Link></div>
-            </header>
+    <ChakraProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthContextProvider>
+          <div className="root">
+            <Outlet />
           </div>
-          <Outlet />
-        </div>
-      </AuthContextProvider>
-    </QueryClientProvider>
+        </AuthContextProvider>
+      </QueryClientProvider>
+    </ChakraProvider>
   );
 }
 

@@ -1,12 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { inspect } from '@xstate/inspect';
+
 
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import {Homepage, Login, Register, Private} from './views'
+import {Homepage, Login, Register, AdminPanel} from './views'
+
+if (process.env.NODE_ENV === 'development') {
+  inspect({
+    iframe: false
+  })
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -22,7 +30,7 @@ root.render(
               <Route path='login' element={<Login />} />
               <Route path='register' element={<Register />} />
             </Route>
-            <Route path='private' element={<Private />} />
+            <Route path='admin-panel' element={<AdminPanel />} />
           </Route>
         </Routes>
       </BrowserRouter>

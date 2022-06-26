@@ -1,6 +1,5 @@
 import { createContext, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { useInterpret } from "@xstate/react";
+import { useInterpret, useSelector, useActor } from "@xstate/react";
 import type {InterpreterFrom} from 'xstate'
 import { useQueryClient } from "react-query";
 
@@ -12,9 +11,9 @@ export const Context = createContext<{
 } | undefined>(undefined)
 
 export const AuthContextProvider: React.FC<{children: React.ReactNode}> = props => {
-  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const authService = useInterpret(authenticationMachine, {
+    devTools: true,
     services: {
       checkIfLoggedIn: () => async (send) => {
         try {
@@ -37,11 +36,6 @@ export const AuthContextProvider: React.FC<{children: React.ReactNode}> = props 
         }
       }
     },
-    actions: {
-      navigateToHomepage: () => {
-        navigate('/auth/login')
-      }
-    }
   })
 
   return (
@@ -58,6 +52,22 @@ export const useAuthContext = () => {
   }
 
   return context
+}
+
+export const useAuthStateValue = () => {
+  const {authService} = useAuthContext()
+  const stateValue = useSelector(authService, state => {
+    return state.value as unknown as Parameters<typeof state.matches>[0]
+  })
+
+  return stateValue
+}
+
+export const useAuthActor = () => {
+  const {authService} = useAuthContext()
+  const [state, send] = useActor(authService)
+
+  return {state, send}
 }
 
 export default AuthContextProvider
